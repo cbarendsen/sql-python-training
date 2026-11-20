@@ -1,0 +1,45 @@
+{
+  "name": "SQL Server and Python Training",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "shutdownAction": "stopCompose",
+
+  // 2 processors and 8 GB of memory: enough for SQL Server and Python together.
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "8gb"
+  },
+
+  // Installs the SQL Server driver and Python packages, then loads the training database.
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["README.md"]
+    },
+    "vscode": {
+      "extensions": [
+        "ms-mssql.mssql",
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ],
+      "settings": {
+        "mssql.connections": [
+          {
+            "profileName": "Training SQL Server",
+            "server": "localhost,1433",
+            "database": "TrainingShop",
+            "authenticationType": "SqlLogin",
+            "user": "sa",
+            "password": "Training!Pass2026",
+            "savePassword": true,
+            "encrypt": "Mandatory",
+            "trustServerCertificate": true
+          }
+        ],
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      }
+    }
+  }
+}

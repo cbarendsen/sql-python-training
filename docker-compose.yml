@@ -1,0 +1,24 @@
+services:
+  # The learner's workspace: Python, the SQL Server driver and command-line tools.
+  app:
+    image: mcr.microsoft.com/devcontainers/python:3.12-bookworm
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    # Shares the database's network, so SQL Server is reachable at "localhost".
+    network_mode: service:db
+
+  # SQL Server 2025 Developer edition (free for development and training).
+  db:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      # Training password only. Change it here and in devcontainer.json if you wish.
+      MSSQL_SA_PASSWORD: "Training!Pass2026"
+    volumes:
+      - sqldata:/var/opt/mssql
+
+volumes:
+  sqldata:
